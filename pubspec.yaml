@@ -41,6 +41,7 @@ dependencies:
   image_picker: ^1.0.1
   cloud_firestore: ^4.8.3
   currency_type: ^0.0.3
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
