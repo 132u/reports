@@ -24,6 +24,7 @@ class _ReportsListState extends State<ReportsList> {
 
   @override
   Widget build(BuildContext context) {
+    //
     final authenticatedUser = FirebaseAuth.instance.currentUser!;
     return Scaffold(
       appBar: AppBar(
