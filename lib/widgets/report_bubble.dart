@@ -15,20 +15,6 @@ class ReportItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Row(children: [
-          Text('Name'),
-          SizedBox(
-            width: 10,
-          ),
-          Text('Customer'),
-          SizedBox(
-            width: 10,
-          ),
-          Text('Price'),
-          SizedBox(
-            width: 10,
-          ),
-        ]),
         InkWell(
           onTap: (){Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>ReportScreen(name)));},
           child: Row(

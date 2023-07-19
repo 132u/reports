@@ -16,6 +16,7 @@ class NewReport extends StatefulWidget{
 
 class _NewReportState extends State<NewReport>{
   var _enteredName;
+  var _enteredCustomerName;
   var _enteredPrice;
   DatabaseService service = DatabaseService();
   // var _nameController = TextEditingController();
@@ -38,8 +39,8 @@ void _addReport() async {
     //   'price':_enteredPrice,
     //   'driverId':user.uid,
     // });
-    var reportData = new Report(user.uid, _enteredName, _enteredPrice);
-    service.addReport(reportData);
+    // var reportData = new Report(user.uid, _enteredName, _enteredPrice, new DateTime.now(),_enteredCustomerName);
+    // service.addReport(reportData);
     Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>ReportsList()));
   }
   @override
@@ -57,7 +58,6 @@ void _addReport() async {
               children: [
                 TextFormField(
                   onSaved: (value){_enteredName = value;},
-                  //controller: _nameController,
                   maxLength: 50,
                   decoration: const InputDecoration(
                     label: Text('Name'),
@@ -70,10 +70,28 @@ void _addReport() async {
                         return null;
                     },
                 ),
+                 TextFormField(
+                  onSaved: (value){_enteredCustomerName = value;},
+                  maxLength: 50,
+                  decoration: const InputDecoration(
+                    label: Text('Customer name'),
+                    ),
+                  validator: (value){
+                     if(value == null || value.trim().isEmpty )
+                        {
+                          return 'Customer name is invalid or empty!';
+                        }
+                        return null;
+                    },
+                ),
+                InputDatePickerFormField(
+                  firstDate: DateTime.now(),
+                  lastDate: DateTime.now().add(Duration(days: 120)),
+                ), 
+
                 Row(children: [
                   Expanded(
                     child: TextFormField(
-                      //controller: _priceController,
                       onSaved: (value){_enteredPrice = value;},
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
