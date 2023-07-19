@@ -18,9 +18,10 @@ class ReportsList extends StatefulWidget {
 
 class _ReportsListState extends State<ReportsList> {
   DatabaseService service = DatabaseService();
-  void _addReport()
-  {
-    Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> const NewReport(),));
+  void _addReport() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (ctx) => const NewReport(),
+    ));
   }
 
   @override
@@ -29,14 +30,22 @@ class _ReportsListState extends State<ReportsList> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(onPressed:_addReport, icon: const Icon(Icons.add))
+          IconButton(onPressed: _addReport, icon: const Icon(Icons.add)),
+          IconButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+              },
+              icon: Icon(
+                Icons.exit_to_app,
+                color: Theme.of(context).colorScheme.primary,
+              )),
         ],
         title: const Text('Your Reports.'),
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('reports')
-            //.where(r => r.)
+            .where('driverId', isEqualTo: authenticatedUser.uid)
             //.orderBy('createdAt', descending: false)
             .snapshots(),
         builder: (ctx, snapshot) {
@@ -56,7 +65,7 @@ class _ReportsListState extends State<ReportsList> {
             );
           }
           final loadedReports = snapshot.data!.docs;
-          
+
           return ListView.builder(
               padding: const EdgeInsets.only(
                 bottom: 40,

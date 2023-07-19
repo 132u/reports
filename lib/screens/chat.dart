@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class ChatScreen extends StatelessWidget{
+class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
 
   @override
@@ -12,13 +12,19 @@ class ChatScreen extends StatelessWidget{
     return Scaffold(
       appBar: AppBar(
         title: const Text('FlutterChat'),
-        actions: [IconButton(onPressed: (){ FirebaseAuth.instance.signOut();}, icon: Icon(Icons.exit_to_app,
-        color: Theme.of(context).colorScheme.primary,))],
+        actions: [
+          IconButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+              },
+              icon: Icon(
+                Icons.exit_to_app,
+                color: Theme.of(context).colorScheme.primary,
+              ))
+        ],
       ),
-      body: Column(children: const [
-        Expanded(child: ChatMessages()),
-        NewMessage()
-      ]),
-    )   ; 
-  } 
+      body: Column(
+          children: const [Expanded(child: ChatMessages()), NewMessage()]),
+    );
+  }
 }
