@@ -1,4 +1,5 @@
 import 'package:chat_app/database_service.dart';
+import 'package:chat_app/models/payment_type.dart';
 import 'package:chat_app/models/report.dart';
 import 'package:chat_app/widgets/reports_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -39,11 +40,7 @@ class _NewReportState extends State<NewReport> {
         .collection('users')
         .doc(user.uid)
         .get();
-    // FirebaseFirestore.instance.collection('reports').add({
-    //   'name':_enteredName,
-    //   'price':_enteredPrice,
-    //   'driverId':user.uid,
-    // });
+    //calculate price method in order to save it in DB
     var now = new DateTime.now();
     var reportData = new Report(user.uid, _enteredName, _enteredPrice, now,
         _enteredStartDate, _enteredCustomerName);
@@ -141,12 +138,21 @@ class _NewReportState extends State<NewReport> {
                       },
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   Expanded(
                     child: DropdownButtonFormField(
-                        items: [], onChanged: (value) {}),
+                        items: PaymentType.values
+                          .map((e) => DropdownMenuItem(
+                                child: Text(e.toString().split('.')[1]),
+                                value: e,
+                              ))
+                          .toList(),
+                      onChanged: (value)
+                      {
+
+                      }),
                   )
                 ],
               ),
@@ -158,7 +164,7 @@ class _NewReportState extends State<NewReport> {
                   ElevatedButton(
                       onPressed: _addReport, child: const Text('Add Report')),
                 ],
-              )
+              ) 
             ],
           ),
         ),
