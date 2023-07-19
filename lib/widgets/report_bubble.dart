@@ -3,31 +3,33 @@ import 'package:chat_app/screens/report.dart';
 import 'package:chat_app/widgets/reports_list.dart';
 import 'package:flutter/material.dart';
 
-class ReportItem extends StatelessWidget {
-  const ReportItem(this.name, this.customerName, this.price);
+import '../models/report.dart';
 
+class ReportItem extends StatelessWidget {
+  const ReportItem(this.report);
+final Report report;
   //final DateTime startDate;
-  final String name;
-  final String customerName;
-  final String price;
+  // final String name;
+  // final String customerName;
+  // final String price;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         InkWell(
-          onTap: (){Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>ReportScreen(name)));},
+          onTap: (){Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>ReportScreen(report.name)));},
           child: Row(
             children: [
-              Text(name),
+              Text(report.name),
               const SizedBox(
                 width: 10,
               ),
-              Text(customerName),
+              Text(report.customer),
               const SizedBox(
                 width: 10,
               ),
-              Text(price.toString()),
+              Text(report.price),
             ],
           ),
         ),

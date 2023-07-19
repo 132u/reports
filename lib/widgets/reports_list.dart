@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import '../database_service.dart';
+import '../models/report.dart';
 
 class ReportsList extends StatefulWidget {
   const ReportsList({super.key});
@@ -66,7 +67,7 @@ class _ReportsListState extends State<ReportsList> {
               itemCount: loadedReports.length,
               itemBuilder: (ctx, index) {
                 final report = loadedReports[index].data();
-                return ReportItem( report['name'],"s" , report['price'] );
+                return ReportItem(Report.fromMap(report));
               });
         },
       ),

@@ -17,6 +17,7 @@ class NewReport extends StatefulWidget{
 class _NewReportState extends State<NewReport>{
   var _enteredName;
   var _enteredCustomerName;
+  var _enteredStartDate;
   var _enteredPrice;
   DatabaseService service = DatabaseService();
   // var _nameController = TextEditingController();
@@ -39,8 +40,9 @@ void _addReport() async {
     //   'price':_enteredPrice,
     //   'driverId':user.uid,
     // });
-    // var reportData = new Report(user.uid, _enteredName, _enteredPrice, new DateTime.now(),_enteredCustomerName);
-    // service.addReport(reportData);
+    var now = new DateTime.now();
+    var reportData = new Report(user.uid, _enteredName, _enteredPrice,now ,_enteredStartDate,_enteredCustomerName);
+    service.addReport(reportData);
     Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>ReportsList()));
   }
   @override
@@ -85,6 +87,7 @@ void _addReport() async {
                     },
                 ),
                 InputDatePickerFormField(
+                  onDateSaved: (value) {_enteredStartDate = value; },
                   firstDate: DateTime.now(),
                   lastDate: DateTime.now().add(Duration(days: 120)),
                 ), 
