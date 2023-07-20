@@ -9,4 +9,18 @@ class DatabaseService{
     await _db.collection("reports").add(reportData.toMap());
   }
 
+
+  getDrivers() async {
+    await _db.collection("drivers").get().then(
+  (querySnapshot) {
+    return querySnapshot.docs;
+    // print("Successfully completed");
+    // for (var docSnapshot in querySnapshot.docs) {
+    //   print('${docSnapshot.id} => ${docSnapshot.data()}');
+    // }
+  },
+  //onError: (e) => print("Error completing: $e"),
+);
+  }
+
 }

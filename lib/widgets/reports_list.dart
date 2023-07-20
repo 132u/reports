@@ -19,9 +19,12 @@ class ReportsList extends StatefulWidget {
 class _ReportsListState extends State<ReportsList> {
   DatabaseService service = DatabaseService();
   void _addReport() {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (ctx) => const NewReport(),
-    ));
+    showModalBottomSheet(
+      context: context, 
+      builder: (ctx)=>NewReport());
+    // Navigator.of(context).push(MaterialPageRoute(
+    //   builder: (ctx) => const NewReport(),
+    // ));
   }
 
   @override
