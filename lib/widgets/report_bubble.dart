@@ -19,18 +19,28 @@ final Report report;
       children: [
         InkWell(
           onTap: (){Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>ReportScreen(report.name)));},
-          child: Row(
-            children: [
-              Text(report.name),
-              const SizedBox(
-                width: 10,
-              ),
-              Text(report.customer),
-              const SizedBox(
-                width: 10,
-              ),
-              Text(report.price),
-            ],
+          child: Expanded(
+            child: Row(
+              children: [
+                Text(report.name),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(report.customer),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(report.price),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(report.isMoneyWithMe ? "Деньги у меня":"Деньги у Виктора"),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text("Тип оплаты:${report.paymentType}"),
+              ],
+            ),
           ),
         ),
       ],

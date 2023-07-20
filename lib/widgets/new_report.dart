@@ -20,7 +20,8 @@ class _NewReportState extends State<NewReport> {
   var _enteredCustomerName;
   var _enteredStartDate;
   var _enteredPrice;
-  var _selectedPaymentType;
+  String? _selectedPaymentType;
+  bool _isMoneyWithme = false;
   TextEditingController _startDateController = TextEditingController();
   DatabaseService service = DatabaseService();
   // var _nameController = TextEditingController();
@@ -44,15 +45,32 @@ class _NewReportState extends State<NewReport> {
     //calculate price method in order to save it in DB
     var now = new DateTime.now();
     var reportData = new Report(user.uid, _enteredName, _enteredPrice, now,
-        _enteredStartDate, _enteredCustomerName);
+        _enteredStartDate, _enteredCustomerName, _isMoneyWithme, _selectedPaymentType);
     service.addReport(reportData);
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (ctx) => ReportsList()));
   }
-
+List<String> howHasMoney = ["у меня", "у Виктора"]; 
 Widget? _showWhoHasMoney(){
- if(_selectedPaymentType == PaymentType.cash){
- return Text('HIHIHIHIHI');  
+ if(_selectedPaymentType == PaymentType.cash.toString().split('.')[1]){
+ return Expanded(
+                      child: DropdownButtonFormField(
+                          items: howHasMoney
+                            .map((e) => DropdownMenuItem(
+                                  child: Text(e),
+                                  value: e,
+                                ))
+                            .toList(),
+                        onChanged: (value)
+                        {
+                          if(value == howHasMoney[0])
+                            {
+                          setState(() {
+                            
+                              _isMoneyWithme = true;
+                            });
+                          };
+                        })); 
  }
  return null;
 }
@@ -154,7 +172,7 @@ Widget? _showWhoHasMoney(){
                           items: PaymentType.values
                             .map((e) => DropdownMenuItem(
                                   child: Text(e.toString().split('.')[1]),
-                                  value: e,
+                                  value: e.toString().split('.')[1],
                                 ))
                             .toList(),
                         onChanged: (value)

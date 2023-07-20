@@ -3,7 +3,7 @@ import 'package:chat_app/models/payment_type.dart';
 import 'package:flutter/material.dart';
 
 class Report{
-  const Report(this.driverId, this.name, this.price, this.createdAt, this.startDateTime,this.customer);//, this.endDateTime, this.startAddress, this.endAddress, this.onPlace, this.isByHours, this.moneyWithMe, this.paymentType, this.customer, this.comment);
+  const Report(this.driverId, this.name, this.price, this.createdAt, this.startDateTime,this.customer, this.isMoneyWithMe, this.paymentType);//, this.endDateTime, this.startAddress, this.endAddress, this.onPlace, this.isByHours, this.moneyWithMe, this.paymentType, this.customer, this.comment);
   //final String id;
   final String driverId;
   final String name;
@@ -14,9 +14,9 @@ class Report{
   // final String? endAddress;
   // final bool onPlace;//работа на месте?
   // final bool isByHours;//почасовка?
-  // final bool moneyWithMe;//деньги у меня?
+  final bool isMoneyWithMe;//деньги у меня?
   final String price;
-  //final PaymentType paymentType;
+  final String? paymentType;
   final String customer;
   // final String comment;
   Map<String, dynamic> toMap() {
@@ -31,8 +31,8 @@ class Report{
       // 'endAddress': endAddress,
       // 'onPlace': onPlace,
       // 'isByHours': isByHours,
-      // 'moneyWithMe': moneyWithMe,
-     // 'paymentType': paymentType,
+       'isMoneyWithMe': isMoneyWithMe,
+     'paymentType': paymentType,
       'customer': customer,
     //  'comment': comment,
     };
@@ -44,5 +44,7 @@ class Report{
         price = reportMap["price"],
         startDateTime = reportMap["startDateTime"].toDate(),
         customer = reportMap["customer"],
-        createdAt = reportMap["createdAt"].toDate();
+        createdAt = reportMap["createdAt"].toDate(),
+        paymentType= reportMap["paymentType"],
+        isMoneyWithMe= reportMap["isMoneyWithMe"];        
 }
