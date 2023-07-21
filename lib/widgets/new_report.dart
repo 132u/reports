@@ -23,8 +23,10 @@ class _NewReportState extends State<NewReport> {
   var _enteredCustomerName;
   var _enteredStartDate;
   var _enteredPrice;
+  var _enteredHourPrice;
   var _enteredStartAdrees;
   var _enteredEndAdrees;
+  var _enteredHoursQuantity;
   String? _selectedPaymentType;
   bool _isMoneyWithme = false;
   bool _isOnPlaceWork = false;
@@ -50,7 +52,13 @@ class _NewReportState extends State<NewReport> {
         _enteredStartDate,
         _enteredCustomerName,
         _isMoneyWithme,
-        _selectedPaymentType);
+        _selectedPaymentType,
+        _enteredStartAdrees,
+        _enteredEndAdrees,
+        _isOnPlaceWork,
+        _isHourWork,
+        _enteredHourPrice,
+        _enteredHoursQuantity);
     service.addReport(reportData);
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (ctx) => const ReportsList()));
@@ -81,12 +89,11 @@ class _NewReportState extends State<NewReport> {
   Widget _showHoursPrices() {
     if (_isHourWork) {
       return Row(
-        //адреса
         children: [
           Expanded(
             child: TextFormField(
               onSaved: (value) {
-                _enteredStartAdrees = value;
+                _enteredHoursQuantity = value;
               },
               maxLength: 2,
               decoration: const InputDecoration(
@@ -103,7 +110,7 @@ class _NewReportState extends State<NewReport> {
           Expanded(
             child: TextFormField(
               onSaved: (value) {
-                _enteredEndAdrees = value;
+                _enteredHourPrice = value;
               },
               maxLength: 50,
               decoration: const InputDecoration(
