@@ -17,7 +17,7 @@ class DriverScreen extends StatelessWidget{
           Text('Отчеты:'),
           //foreach loop in reports table searching by driverid
           InkWell(
-            child: ReportScreen(name),
+         //   child: ReportScreen(),
           )
         ],
       ),

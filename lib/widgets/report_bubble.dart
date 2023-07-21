@@ -19,7 +19,7 @@ final Report report;
     return Column(
       children: [
         InkWell(
-          onTap: (){Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>ReportScreen(report.name)));},
+          onTap: (){Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>ReportScreen(report)));},
           child: Expanded(
             child: Row(
               children: [

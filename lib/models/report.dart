@@ -1,9 +1,11 @@
 import 'package:chat_app/models/customer.dart';
 import 'package:chat_app/models/payment_type.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Report{
   const Report(this.driverId, this.name, this.price, this.createdAt, this.startDateTime,this.customer, this.isMoneyWithMe, this.paymentType);//, this.endDateTime, this.startAddress, this.endAddress, this.onPlace, this.isByHours, this.moneyWithMe, this.paymentType, this.customer, this.comment);
+
   //final String id;
   final String driverId;
   final String name;
@@ -25,7 +27,7 @@ class Report{
       'name': name,
       'price': price,
       'createdAt': createdAt,
-       'startDateTime': startDateTime,
+       'startDateTime':startDateTime,
       // 'endDateTime': endDateTime,
       // 'startAddress': startAddress,
       // 'endAddress': endAddress,

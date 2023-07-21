@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 
+import '../models/payment_type.dart';
+import '../models/report.dart';
+
 
 class ReportScreen extends StatelessWidget{
-  const ReportScreen(this.name);
+  const ReportScreen(this.report);
 
-  //final Report report;
-  final String name;
+  final Report report;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Report'),
+        title: Text('Отчет ${report.name}'),
       ),
-      body: Column(
+      body: ListView(
         children: [
-          Text(name),
+          Text(report.name),
+          Text("Заказчик ${report.customer}"),
+          Text("Цена ${report.price}₽ ${
+            report.paymentType == PaymentType.cash.toString().split('.')[1] ? " наличными": " с НДС"}"),
+          
         ],
       ),
     );

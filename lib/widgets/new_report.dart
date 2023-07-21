@@ -43,9 +43,12 @@ class _NewReportState extends State<NewReport> {
         .doc(user.uid)
         .get();
     //calculate price method in order to save it in DB
-    var now = new DateTime.now();
+    var now = DateTime.now() ;
+    //var now = DateFormat('dd-MM-yyyy').format(_enteredStartDate) ;
+    //new DateTime.now()
+    //var d=DateFormat('dd-MM-yyyy').format(_enteredStartDate);
     var reportData = new Report(user.uid, _enteredName, _enteredPrice, now,
-        _enteredStartDate, _enteredCustomerName, _isMoneyWithme, _selectedPaymentType);
+      _enteredStartDate, _enteredCustomerName, _isMoneyWithme, _selectedPaymentType);
     service.addReport(reportData);
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (ctx) => ReportsList()));
@@ -125,11 +128,15 @@ Widget? _showWhoHasMoney(){
                         initialDate: DateTime.now(),
                         firstDate: DateTime.now().add(Duration(days: -120)),
                         lastDate: DateTime.now().add(Duration(days: 120)));
-                    _startDateController.text= pickedDate.toString();// DateFormat.yMMMd().format(pickedDate!);
-          
+                        // final DateFormat formatter = DateFormat('dd-MM-yyyy');
+                        // final String output = DateFormat('dd-MM-yyyy').format(pickedDate!);
+                    // _startDateController.text= output;// DateFormat.yMMMd().format(pickedDate!);
+                   // _startDateController.text = DateFormat.yMd().format(pickedDate!);
+                    _startDateController.text="${pickedDate!.day}-${pickedDate.month}-${pickedDate.year}"; //pickedDate!.toString();// DateFormat.yMMMd().format(pickedDate!);
+
                   },
                   onSaved: (value) {
-                    _enteredStartDate = DateTime.parse(value!);                  
+                    _enteredStartDate = DateFormat("dd-M-yyyy").parse(value!);                    
                   },
                   maxLength: 50,
                   decoration: const InputDecoration(

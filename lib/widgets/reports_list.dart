@@ -1,9 +1,6 @@
-import 'package:chat_app/widgets/message_bubble.dart';
 import 'package:chat_app/widgets/new_report.dart';
-import 'package:chat_app/widgets/report_bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -24,10 +21,6 @@ class _ReportsListState extends State<ReportsList> {
     showModalBottomSheet(
       context: context, 
       builder: (ctx)=>const NewReport());
-      
-    // Navigator.of(context).push(MaterialPageRoute(
-    //   builder: (ctx) => const NewReport(),
-    // ));
   }
 
   @override
@@ -85,12 +78,10 @@ class _ReportsListState extends State<ReportsList> {
                   subtitle: Text(Report.fromMap(report).customer),
                   leading: Text(DateFormat('dd-MM-yyyy').format(Report.fromMap(report).createdAt)),
                   onTap: (){
-                    Navigator.of(context).push(MaterialPageRoute( builder: (ctx) => ReportScreen(Report.fromMap(report).name)));
-                    //Navigator.of(context).pop(MaterialPageRoute(builder: (ctx)=>ReportItem(Report.fromMap(report))));
-                  },//open report,
+                    Navigator.of(context).push(MaterialPageRoute( builder: (ctx) => ReportScreen(Report.fromMap(report))));
+                  },
                   trailing: Text("${Report.fromMap(report).price} ₽ ${Report.fromMap(report).isMoneyWithMe ? " у меня" : "у Виктора"}"),
                 ); 
-               // ReportItem(Report.fromMap(report));
               });
         },
       ),
