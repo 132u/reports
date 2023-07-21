@@ -1,7 +1,5 @@
-import 'package:chat_app/main.dart';
 import 'package:flutter/material.dart';
 
-import '../models/report.dart';
 
 class ReportScreen extends StatelessWidget{
   const ReportScreen(this.name);

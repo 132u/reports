@@ -5,9 +5,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../database_service.dart';
 import '../models/report.dart';
+import '../screens/Report.dart';
 
 class ReportsList extends StatefulWidget {
   const ReportsList({super.key});
@@ -21,7 +23,8 @@ class _ReportsListState extends State<ReportsList> {
   void _addReport() {
     showModalBottomSheet(
       context: context, 
-      builder: (ctx)=>NewReport());
+      builder: (ctx)=>const NewReport());
+      
     // Navigator.of(context).push(MaterialPageRoute(
     //   builder: (ctx) => const NewReport(),
     // ));
@@ -43,13 +46,12 @@ class _ReportsListState extends State<ReportsList> {
                 color: Theme.of(context).colorScheme.primary,
               )),
         ],
-        title: const Text('Your Reports.'),
+        title: const Text('Мои отчеты'),
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('reports')
             .where('driverId', isEqualTo: authenticatedUser.uid)
-            //.orderBy('createdAt', descending: false)
             .snapshots(),
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -59,12 +61,12 @@ class _ReportsListState extends State<ReportsList> {
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return const Center(
-              child: const Text('No reports here'),
+              child: Text('No reports here'),
             );
           }
           if (snapshot.hasError) {
             return const Center(
-              child: const Text('Something went wrong'),
+              child: Text('Something went wrong'),
             );
           }
           final loadedReports = snapshot.data!.docs;
@@ -75,11 +77,20 @@ class _ReportsListState extends State<ReportsList> {
                 left: 13,
                 right: 13,
               ),
-              reverse: true,
               itemCount: loadedReports.length,
               itemBuilder: (ctx, index) {
                 final report = loadedReports[index].data();
-                return ReportItem(Report.fromMap(report));
+                return ListTile(
+                  title: Text(Report.fromMap(report).name),
+                  subtitle: Text(Report.fromMap(report).customer),
+                  leading: Text(DateFormat('dd-MM-yyyy').format(Report.fromMap(report).createdAt)),
+                  onTap: (){
+                    Navigator.of(context).push(MaterialPageRoute( builder: (ctx) => ReportScreen(Report.fromMap(report).name)));
+                    //Navigator.of(context).pop(MaterialPageRoute(builder: (ctx)=>ReportItem(Report.fromMap(report))));
+                  },//open report,
+                  trailing: Text("${Report.fromMap(report).price} ₽ ${Report.fromMap(report).isMoneyWithMe ? " у меня" : "у Виктора"}"),
+                ); 
+               // ReportItem(Report.fromMap(report));
               });
         },
       ),

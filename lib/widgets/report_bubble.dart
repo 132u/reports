@@ -2,6 +2,7 @@ import 'package:chat_app/screens/reports.dart';
 import 'package:chat_app/screens/report.dart';
 import 'package:chat_app/widgets/reports_list.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../models/report.dart';
 
@@ -26,10 +27,6 @@ final Report report;
                 const SizedBox(
                   width: 10,
                 ),
-                Text(report.customer),
-                const SizedBox(
-                  width: 10,
-                ),
                 Text(report.price),
                 const SizedBox(
                   width: 10,
@@ -38,7 +35,8 @@ final Report report;
                 const SizedBox(
                   width: 10,
                 ),
-                Text("Тип оплаты:${report.paymentType}"),
+                Text(DateFormat('dd-MM-yyyy').format(report.createdAt)),
+                //DateFormat('dd-MM-yyyy').format(report.createdAt)
               ],
             ),
           ),
