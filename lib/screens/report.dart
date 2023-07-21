@@ -6,8 +6,20 @@ import '../models/report.dart';
 
 class ReportScreen extends StatelessWidget{
   const ReportScreen(this.report);
-
+String paymentType()
+{
+  if(report.paymentType == PaymentType.cash.toString().split('.')[1])
+  {
+    return " наличными ${report.isMoneyWithMe ? " у меня": " у Виктора"}";
+  }
+    if(report.paymentType == PaymentType.withVAT.toString().split('.')[1])
+  {
+    return " с НДС у Виктора";
+  }
+    return " без НДС у Виктора";
+}
   final Report report;
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,8 +30,7 @@ class ReportScreen extends StatelessWidget{
         children: [
           Text(report.name),
           Text("Заказчик ${report.customer}"),
-          Text("Цена ${report.price}₽ ${
-            report.paymentType == PaymentType.cash.toString().split('.')[1] ? " наличными": " с НДС"}"),
+          Text("Деньги ${report.price}₽ ${paymentType()}"),
           
         ],
       ),

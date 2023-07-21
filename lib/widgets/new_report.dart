@@ -31,6 +31,9 @@ class _NewReportState extends State<NewReport> {
   bool _isMoneyWithme = false;
   bool _isOnPlaceWork = false;
   bool _isHourWork = false;
+  bool _isCash = false;
+  bool _isWithVAT = false;
+  bool _isWithoutVAT = false;
   TextEditingController _startDateController = TextEditingController();
   DatabaseService service = DatabaseService();
   final _formKey = GlobalKey<FormState>();

@@ -4,9 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Report{
-  const Report(this.driverId, this.name, this.price, this.createdAt, this.startDateTime,this.customer, this.isMoneyWithMe, this.paymentType, this.startAddress, this.endAddress, this.onPlace, this.isByHours, this.hourPrice, this.hourQuantity);//, this.endDateTime, this.startAddress, this.endAddress, this.onPlace, this.isByHours, this.moneyWithMe, this.paymentType, this.customer, this.comment);
+   Report(
+    this.driverId,
+     this.name,
+      this.price,
+       this.createdAt,
+        this.startDateTime,this.customer, this.isMoneyWithMe, this.paymentType, this.startAddress, 
+        this.endAddress, this.onPlace, this.isByHours, this.hourPrice, this.hourQuantity) {
+          calculatePrice();
+        }
 
-  //final String id;
   final String driverId;
   final String name;
   final DateTime createdAt;
@@ -17,7 +24,7 @@ class Report{
   final bool onPlace;//работа на месте?
   final bool isByHours;//почасовка?
   final bool isMoneyWithMe;//деньги у меня?
-  final String? price;
+  String? price;
   final String? hourPrice;
   final String? hourQuantity;
   final String? paymentType;
@@ -43,7 +50,20 @@ class Report{
     //  'comment': comment,
     };
   }
+void calculatePrice()
+{
+  if(isByHours){
+    var f=int.parse(hourPrice!);
+    var f2=int.parse(hourQuantity!);
+    price = (f*f2).toString();
+  }
+    if(paymentType == PaymentType.withoutVAT.toString().split('.')[1]){
+      price=(int.parse(price!) - int.parse(price!)*0.2).toString();}
+    if(paymentType == PaymentType.withVAT.toString().split('.')[1]){
+      price=(int.parse(price!) - int.parse(price!)*0.1).toString();
 
+  }
+}
   Report.fromMap(Map<String, dynamic> reportMap)
       : name = reportMap["name"],
         driverId = reportMap["driverId"],
