@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 class NewReport extends StatefulWidget {
   const NewReport({super.key});
 
@@ -24,14 +25,6 @@ class _NewReportState extends State<NewReport> {
   bool _isMoneyWithme = false;
   TextEditingController _startDateController = TextEditingController();
   DatabaseService service = DatabaseService();
-  // var _nameController = TextEditingController();
-  // var _priceController = TextEditingController();
-  // @override
-  // void dispose() {
-  //   _nameController.dispose();
-  //   _priceController.dispose();
-  //   super.dispose();
-  // }
   final _formKey = GlobalKey<FormState>();
   void _addReport() async {
     if (_formKey.currentState!.validate()) {
@@ -42,53 +35,55 @@ class _NewReportState extends State<NewReport> {
         .collection('users')
         .doc(user.uid)
         .get();
-    //calculate price method in order to save it in DB
-    var now = DateTime.now() ;
-    //var now = DateFormat('dd-MM-yyyy').format(_enteredStartDate) ;
-    //new DateTime.now()
-    //var d=DateFormat('dd-MM-yyyy').format(_enteredStartDate);
-    var reportData = new Report(user.uid, _enteredName, _enteredPrice, now,
-      _enteredStartDate, _enteredCustomerName, _isMoneyWithme, _selectedPaymentType);
+    var now = DateTime.now();
+    var reportData = Report(
+        user.uid,
+        _enteredName,
+        _enteredPrice,
+        now,
+        _enteredStartDate,
+        _enteredCustomerName,
+        _isMoneyWithme,
+        _selectedPaymentType);
     service.addReport(reportData);
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (ctx) => ReportsList()));
+        .push(MaterialPageRoute(builder: (ctx) => const ReportsList()));
   }
-List<String> howHasMoney = ["у меня", "у Виктора"]; 
-Widget? _showWhoHasMoney(){
- if(_selectedPaymentType == PaymentType.cash.toString().split('.')[1]){
- return Expanded(
-                      child: DropdownButtonFormField(
-                          items: howHasMoney
-                            .map((e) => DropdownMenuItem(
-                                  child: Text(e),
-                                  value: e,
-                                ))
-                            .toList(),
-                        onChanged: (value)
-                        {
-                          if(value == howHasMoney[0])
-                            {
-                          setState(() {
-                            
-                              _isMoneyWithme = true;
-                            });
-                          };
-                        })); 
- }
- return null;
-}
+
+  List<String> howHasMoney = ["у меня", "у Виктора"];
+  Widget? _showWhoHasMoney() {
+    if (_selectedPaymentType == PaymentType.cash.toString().split('.')[1]) {
+      return Expanded(
+          child: DropdownButtonFormField(
+              items: howHasMoney
+                  .map((e) => DropdownMenuItem(
+                        child: Text(e),
+                        value: e,
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                if (value == howHasMoney[0]) {
+                  setState(() {
+                    _isMoneyWithme = true;
+                  });
+                }
+              }));
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add new report'),
+        title: Text('Добавить новый отчет'),
       ),
       body: Padding(
         padding: EdgeInsets.all(12),
         child: Form(
           key: _formKey,
-          child: ListView(
-            children:[ Column(
+          child: ListView(children: [
+            Column(
               children: [
                 TextFormField(
                   onSaved: (value) {
@@ -96,11 +91,11 @@ Widget? _showWhoHasMoney(){
                   },
                   maxLength: 50,
                   decoration: const InputDecoration(
-                    label: Text('Name'),
+                    label: Text('Коротко о заказе'),
                   ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'name is invalid or empty!';
+                      return 'Заполните пожалуйста поле Коротко о заказе :)';
                     }
                     return null;
                   },
@@ -111,11 +106,11 @@ Widget? _showWhoHasMoney(){
                   },
                   maxLength: 50,
                   decoration: const InputDecoration(
-                    label: Text('Customer name'),
+                    label: Text('Имя заказчика'),
                   ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Customer name is invalid or empty!';
+                      return 'Заполните пожалуйста имя заказчика :)';
                     }
                     return null;
                   },
@@ -123,29 +118,25 @@ Widget? _showWhoHasMoney(){
                 TextFormField(
                   controller: _startDateController,
                   onTap: () async {
-                    DateTime? pickedDate =  await showDatePicker(
+                    DateTime? pickedDate = await showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),
-                        firstDate: DateTime.now().add(Duration(days: -120)),
-                        lastDate: DateTime.now().add(Duration(days: 120)));
-                        // final DateFormat formatter = DateFormat('dd-MM-yyyy');
-                        // final String output = DateFormat('dd-MM-yyyy').format(pickedDate!);
-                    // _startDateController.text= output;// DateFormat.yMMMd().format(pickedDate!);
-                   // _startDateController.text = DateFormat.yMd().format(pickedDate!);
-                    _startDateController.text="${pickedDate!.day}-${pickedDate.month}-${pickedDate.year}"; //pickedDate!.toString();// DateFormat.yMMMd().format(pickedDate!);
-
+                        firstDate: DateTime.now().add(const Duration(days: -120)),
+                        lastDate: DateTime.now().add(const Duration(days: 120)));
+                    _startDateController.text =
+                        "${pickedDate!.day}-${pickedDate.month}-${pickedDate.year}"; //pickedDate!.toString();// DateFormat.yMMMd().format(pickedDate!);
                   },
                   onSaved: (value) {
-                    _enteredStartDate = DateFormat("dd-M-yyyy").parse(value!);                    
+                    _enteredStartDate = DateFormat("dd-M-yyyy").parse(value!);
                   },
                   maxLength: 50,
                   decoration: const InputDecoration(
                     icon: Icon(Icons.calendar_today_rounded),
-                    label: Text('Report Date'),
+                    label: Text('Дата выполнения заказа'),
                   ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Report date is invalid or empty!';
+                      return 'Заполните пожалуйста поле Дата выполнения заказа';
                     }
                     return null;
                   },
@@ -159,13 +150,13 @@ Widget? _showWhoHasMoney(){
                         },
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
-                          label: Text('Price'),
+                          label: Text('Цена'),
                         ),
                         validator: (value) {
                           if (value == null ||
                               value.trim().isEmpty ||
                               int.tryParse(value) == null) {
-                            return 'Price is invalid or empty!';
+                            return 'Заполните пожалуйста поле Цена :)';
                           }
                           return null;
                         },
@@ -177,36 +168,35 @@ Widget? _showWhoHasMoney(){
                     Expanded(
                       child: DropdownButtonFormField(
                           items: PaymentType.values
-                            .map((e) => DropdownMenuItem(
-                                  child: Text(e.toString().split('.')[1]),
-                                  value: e.toString().split('.')[1],
-                                ))
-                            .toList(),
-                        onChanged: (value)
-                        {
-                          setState(() {
-                            _selectedPaymentType = value;
-                          });
-                        }),
-                     //(){_showWhoHasMoney()},
+                              .map((e) => DropdownMenuItem(
+                                    child: Text(e.toString().split('.')[1]),
+                                    value: e.toString().split('.')[1],
+                                  ))
+                              .toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedPaymentType = value;
+                            });
+                          }),
                     ),
-                    Container(
-                          child: _showWhoHasMoney()
-                        )      
+                    Container(child: _showWhoHasMoney())
                   ],
                 ),
                 Row(
                   children: [
-                    TextButton(onPressed: () {
-                      _formKey.currentState!.reset();
-                    }, child: const Text('Reset')),
+                    TextButton(
+                        onPressed: () {
+                          _formKey.currentState!.reset();
+                        },
+                        child: const Text('Очистить форму')),
                     ElevatedButton(
-                        onPressed: _addReport, child: const Text('Add Report')),
+                        onPressed: _addReport,
+                        child: const Text('Добавить отчет')),
                   ],
-                ) 
+                )
               ],
-            ),]
-          ),
+            ),
+          ]),
         ),
       ),
     );
