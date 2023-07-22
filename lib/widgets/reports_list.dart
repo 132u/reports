@@ -80,7 +80,7 @@ class _ReportsListState extends State<ReportsList> {
                   onTap: (){
                     Navigator.of(context).push(MaterialPageRoute( builder: (ctx) => ReportScreen(Report.fromMap(report))));
                   },
-                  trailing: Text("${Report.fromMap(report).price} ₽ ${Report.fromMap(report).isMoneyWithMe ? " у меня" : "у Виктора"}"),
+                  trailing: Text("${Report.fromMap(report).endPrice} ₽ ${Report.fromMap(report).isMoneyWithMe ? " у меня" : "у Виктора"}"),
                 ); 
               });
         },

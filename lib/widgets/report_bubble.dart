@@ -27,7 +27,7 @@ final Report report;
                 const SizedBox(
                   width: 10,
                 ),
-                Text(report.price),
+                Text(report.endPrice!.toString()),
                 const SizedBox(
                   width: 10,
                 ),

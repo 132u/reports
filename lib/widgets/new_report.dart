@@ -3,6 +3,7 @@ import 'package:chat_app/models/payment_type.dart';
 import 'package:chat_app/models/report.dart';
 import 'package:chat_app/widgets/reports_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:currency_type/currency_type.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,11 +23,11 @@ class _NewReportState extends State<NewReport> {
   var _enteredName;
   var _enteredCustomerName;
   var _enteredStartDate;
-  var _enteredPrice;
-  var _enteredHourPrice;
+  double? _enteredPrice=0;
+  double? _enteredHourPrice=0;
   var _enteredStartAdrees;
   var _enteredEndAdrees;
-  var _enteredHoursQuantity;
+  double? _enteredHoursQuantity=0;
   String? _selectedPaymentType;
   bool _isMoneyWithme = false;
   bool _isOnPlaceWork = false;
@@ -96,15 +97,16 @@ class _NewReportState extends State<NewReport> {
           Expanded(
             child: TextFormField(
               onSaved: (value) {
-                _enteredHoursQuantity = value;
+                _enteredHoursQuantity = double.tryParse(value!);
               },
               maxLength: 2,
+              keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                 label: Text('Сколько часов?'),
               ),
               validator: (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return 'Заполните пожалуйста колчисевто часов :)';
+                  return 'Заполните пожалуйста количество часов :)';
                 }
                 return null;
               },
@@ -113,9 +115,10 @@ class _NewReportState extends State<NewReport> {
           Expanded(
             child: TextFormField(
               onSaved: (value) {
-                _enteredHourPrice = value;
+                _enteredHourPrice = double.tryParse(value!);
               },
               maxLength: 50,
+              keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                 label: Text('Цена за час'),
               ),
@@ -134,7 +137,7 @@ class _NewReportState extends State<NewReport> {
       Expanded(
         child: TextFormField(
           onSaved: (value) {
-            _enteredPrice = value;
+            _enteredPrice = double.tryParse(value!);
           },
           keyboardType: TextInputType.number,
           decoration: const InputDecoration(
@@ -143,7 +146,7 @@ class _NewReportState extends State<NewReport> {
           validator: (value) {
             if (value == null ||
                 value.trim().isEmpty ||
-                int.tryParse(value) == null) {
+                double.tryParse(value) == null) {
               return 'Заполните пожалуйста поле Цена :)';
             }
             return null;

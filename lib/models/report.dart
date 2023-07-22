@@ -7,7 +7,7 @@ class Report{
    Report(
     this.driverId,
      this.name,
-      this.price,
+      this.initialPrice,
        this.createdAt,
         this.startDateTime,this.customer, this.isMoneyWithMe, this.paymentType, this.startAddress, 
         this.endAddress, this.onPlace, this.isByHours, this.hourPrice, this.hourQuantity) {
@@ -24,9 +24,10 @@ class Report{
   final bool onPlace;//работа на месте?
   final bool isByHours;//почасовка?
   final bool isMoneyWithMe;//деньги у меня?
-  String? price;
-  final String? hourPrice;
-  final String? hourQuantity;
+  double? endPrice;
+  double? initialPrice;
+  final double? hourPrice;
+  final double? hourQuantity;
   final String? paymentType;
   final String customer;
   // final String comment;
@@ -34,7 +35,8 @@ class Report{
     return {
       'driverId':driverId,
       'name': name,
-      'price': price,
+      'initialPrice': initialPrice,
+      'endPrice': endPrice,
       'createdAt': createdAt,
        'startDateTime':startDateTime,
       // 'endDateTime': endDateTime,
@@ -53,21 +55,23 @@ class Report{
 void calculatePrice()
 {
   if(isByHours){
-    var f=int.parse(hourPrice!);
-    var f2=int.parse(hourQuantity!);
-    price = (f*f2).toString();
+    initialPrice= hourPrice! * hourQuantity!;
   }
+  if(paymentType == PaymentType.cash.toString().split('.')[1]){
+      endPrice=initialPrice;
+      }
     if(paymentType == PaymentType.withoutVAT.toString().split('.')[1]){
-      price=(int.parse(price!) - int.parse(price!)*0.2).toString();}
+      endPrice=initialPrice! - initialPrice! * 0.2;}
     if(paymentType == PaymentType.withVAT.toString().split('.')[1]){
-      price=(int.parse(price!) - int.parse(price!)*0.1).toString();
+      endPrice=initialPrice! - initialPrice! * 0.1;}
 
   }
-}
+
   Report.fromMap(Map<String, dynamic> reportMap)
       : name = reportMap["name"],
         driverId = reportMap["driverId"],
-        price = reportMap["price"],
+        endPrice= reportMap["endPrice"],
+        initialPrice = reportMap["initialPrice"],
         startDateTime = reportMap["startDateTime"].toDate(),
         customer = reportMap["customer"],
         createdAt = reportMap["createdAt"].toDate(),
