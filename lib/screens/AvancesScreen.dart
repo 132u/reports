@@ -8,7 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../database_service.dart';
+import '../widgets/base_app_bar.dart';
+List<Widget> actionButtonInMAInHedaer = [
 
+];
 class AvancesScreen extends StatefulWidget {
   const AvancesScreen({super.key});
 
@@ -24,37 +27,38 @@ class _AvancesScreenState extends State<AvancesScreen> {
     final authenticatedUser = FirebaseAuth.instance.currentUser!;
     return Scaffold(
       drawer: MyNavigationDrawer(),
-      appBar: AppBar(
-        actions: [
-          PopupMenuButton(
-              onSelected: (value) {
-                if (value == 'Отчет') {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (ctx) => const NewReportScreen()));
-                } else {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (ctx) => NewAvanceScreen()));
-                }
-              },
-              itemBuilder: (context) => const [
-                    PopupMenuItem(
-                      child: Text('Отчет'),
-                      value: 'Отчет',
-                    ),
-                    PopupMenuItem(
-                        child: Text('Аванс/Сдал'), value: 'Аванс/сдал'),
-                  ]),
-
-          IconButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-              },
-              icon: Icon(
-                Icons.exit_to_app,
-                color: Theme.of(context).colorScheme.primary,
-              )),
-        ],
-        title: const Text('Мои авансы/сдачи'),
+      appBar: BaseAppBar(
+          appBar: AppBar(),
+          title: const Text('Мои авансы/сдачи'),
+        // actions: [
+        //    IconButton(
+        //       onPressed: () {
+        //         FirebaseAuth.instance.signOut();
+        //       },
+        //       icon: Icon(
+        //         Icons.exit_to_app,
+        //         color: Colors.green,
+        //       )),
+        //   PopupMenuButton(
+        //       onSelected: (value) {
+        //         if (value == 'Отчет') {
+        //           Navigator.of(context).push(
+        //               MaterialPageRoute(builder: (ctx) => const NewReportScreen()));
+        //         } else {
+        //           Navigator.of(context).push(
+        //               MaterialPageRoute(builder: (ctx) => NewAvanceScreen()));
+        //         }
+        //       },
+        //       itemBuilder: (context) => const [
+        //             PopupMenuItem(
+        //               child: Text('Отчет'),
+        //               value: 'Отчет',
+        //             ),
+        //             PopupMenuItem(
+        //                 child: Text('Аванс/Сдал'), value: 'Аванс/сдал'),
+        //           ]),         
+        // ],
+        
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
@@ -89,7 +93,7 @@ class _AvancesScreenState extends State<AvancesScreen> {
               itemBuilder: (ctx, index) {
                 final avance = loadedAvances[index].data();
                 return ListTile(
-                  title: Text("${Avance.fromMap(avance).amount.toString()}₽"),
+                  title: Text("${Avance.fromMap(avance).amount.toString()} руб."),
                   //subtitle: Text(Avance.fromMap(avance).customer),
                   leading: Text(DateFormat('dd-MM-yyyy')
                       .format(Avance.fromMap(avance).createdAt)),

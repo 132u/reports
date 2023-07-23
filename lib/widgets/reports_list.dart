@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import '../database_service.dart';
 import '../models/report.dart';
 import '../screens/Report.dart';
+import 'base_app_bar.dart';
 
 class ReportsList extends StatefulWidget {
   const ReportsList({super.key});
@@ -19,6 +20,8 @@ class ReportsList extends StatefulWidget {
 
 class _ReportsListState extends State<ReportsList> {
   DatabaseService service = DatabaseService();
+  bool _isAdmin = false;
+  List<String> adminIds = ["k9y9HZaxjmTUIlonuyxpLd4Aqod2"];
   void _addReport() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => NewReportScreen()));
@@ -27,51 +30,35 @@ class _ReportsListState extends State<ReportsList> {
     //   builder: (ctx)=>const NewReportScreen());
   }
 
+  final authenticatedUser = FirebaseAuth.instance.currentUser!;
+  Stream<QuerySnapshot<Map<String, dynamic>>> _getReportListOfAllDrivers() {
+    if(adminIds.contains(authenticatedUser.uid)){
+      _isAdmin = true;
+    }
+    if (!_isAdmin) {
+      return FirebaseFirestore.instance
+          .collection('reports')
+          .where('driverId', isEqualTo: authenticatedUser.uid)
+          .snapshots();
+    } else {
+      return FirebaseFirestore.instance.collection('reports').snapshots();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final authenticatedUser = FirebaseAuth.instance.currentUser!;
     return Scaffold(
       drawer: MyNavigationDrawer(),
-      appBar: AppBar(
-        actions: [
-          //IconButton(onPressed: _addReport, icon: const Icon(Icons.add)),
-          PopupMenuButton(
-              //  onPressed:_addReport(),
-              onSelected: (value) {
-                if (value == 'Отчет') {
-                  //_addReport;
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (ctx) => const NewReportScreen()));
-                } else {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (ctx) => NewAvanceScreen()));
-                }
-              },
-              itemBuilder: (context) => const [
-                    PopupMenuItem(
-                      child: Text('Отчет'),
-                      value: 'Отчет',
-                    ),
-                    PopupMenuItem(
-                        child: Text('Аванс/Сдал'), value: 'Аванс/сдал'),
-                  ]),
-
-          IconButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-              },
-              icon: Icon(
-                Icons.exit_to_app,
-                color: Theme.of(context).colorScheme.primary,
-              )),
-        ],
+      appBar: BaseAppBar(
+        appBar: AppBar(),
         title: const Text('Мои отчеты'),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('reports')
-            .where('driverId', isEqualTo: authenticatedUser.uid)
-            .snapshots(),
+        // stream: FirebaseFirestore.instance
+        //     .collection('reports')
+        //     .where('driverId', isEqualTo: authenticatedUser.uid)
+        //     .snapshots(),
+        stream: _getReportListOfAllDrivers(),
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
