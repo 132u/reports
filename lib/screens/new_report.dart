@@ -10,24 +10,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class NewReport extends StatefulWidget {
-  const NewReport({super.key});
+class NewReportScreen extends StatefulWidget {
+  const NewReportScreen({super.key});
 
   @override
-  State<NewReport> createState() {
-    return _NewReportState();
+  State<NewReportScreen> createState() {
+    return _NewReportScreenState();
   }
 }
 
-class _NewReportState extends State<NewReport> {
+class _NewReportScreenState extends State<NewReportScreen> {
   var _enteredName;
   var _enteredCustomerName;
   var _enteredStartDate;
-  double? _enteredPrice=0;
-  double? _enteredHourPrice=0;
+  double? _enteredPrice = 0;
+  double? _enteredHourPrice = 0;
   var _enteredStartAdrees;
   var _enteredEndAdrees;
-  double? _enteredHoursQuantity=0;
+  double? _enteredHoursQuantity = 0;
   String? _selectedPaymentType;
   bool _isMoneyWithme = false;
   bool _isOnPlaceWork = false;
@@ -72,20 +72,21 @@ class _NewReportState extends State<NewReport> {
   Widget _showWhoHasMoney() {
     if (_selectedPaymentType == PaymentType.cash.toString().split('.')[1]) {
       return Expanded(
-          child: DropdownButtonFormField(
-              items: howHasMoney
-                  .map((e) => DropdownMenuItem(
-                        child: Text(e),
-                        value: e,
-                      ))
-                  .toList(),
-              onChanged: (value) {
-                if (value == howHasMoney[0]) {
-                  setState(() {
-                    _isMoneyWithme = true;
-                  });
-                }
-              }));
+        child: DropdownButtonFormField(
+            items: howHasMoney
+                .map((e) => DropdownMenuItem(
+                      child: Text(e),
+                      value: e,
+                    ))
+                .toList(),
+            onChanged: (value) {
+              if (value == howHasMoney[0]) {
+                setState(() {
+                  _isMoneyWithme = true;
+                });
+              }
+            }),
+      );
     }
     return SizedBox();
   }
@@ -157,20 +158,20 @@ class _NewReportState extends State<NewReport> {
   }
 
   Widget _showPaymentTypeAndWhoHasMoney() {
-   return  Expanded(
-                      child: DropdownButtonFormField(
-                          items: PaymentType.values
-                              .map((e) => DropdownMenuItem(
-                                    child: Text(e.toString().split('.')[1]),
-                                    value: e.toString().split('.')[1],
-                                  ))
-                              .toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedPaymentType = value;
-                            });
-                          }),
-                    );
+    return Expanded(
+      child: DropdownButtonFormField(
+          items: PaymentType.values
+              .map((e) => DropdownMenuItem(
+                    child: Text(e.toString().split('.')[1]),
+                    value: e.toString().split('.')[1],
+                  ))
+              .toList(),
+          onChanged: (value) {
+            setState(() {
+              _selectedPaymentType = value;
+            });
+          }),
+    );
   }
 
   Widget _showAddresses() {
@@ -311,7 +312,7 @@ class _NewReportState extends State<NewReport> {
                   },
                 ),
                 CheckboxListTile(
-                  title: Text("Работа на месте?"),
+                  title: const Text("Работа на месте?"),
                   value: _isOnPlaceWork,
                   onChanged: (value) {
                     setState(() {
@@ -322,7 +323,7 @@ class _NewReportState extends State<NewReport> {
                 ),
                 _showAddresses(),
                 CheckboxListTile(
-                  title: Text("Почасовка?"),
+                  title: const Text("Почасовка?"),
                   value: _isHourWork,
                   onChanged: (value) {
                     setState(() {
@@ -386,7 +387,7 @@ class _NewReportState extends State<NewReport> {
                         onPressed: _addReport,
                         child: const Text('Добавить отчет')),
                   ],
-                )
+                ),
               ],
             ),
           ]),

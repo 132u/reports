@@ -12,6 +12,6 @@ class ReportsScreen extends StatefulWidget{
 class ReportListState extends State<ReportsScreen>{
   @override
   Widget build(BuildContext context) {
-    return  ReportsList();
+    return  const ReportsList();
   }
 }

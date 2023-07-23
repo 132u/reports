@@ -21,12 +21,23 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'FlutterChat',
-      theme: ThemeData().copyWith(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 63, 17, 177)),
-      ),
+      title: 'Отчеты',
+      theme: ThemeData(
+    // Define the default brightness and colors.
+   // brightness: Brightness.dark,
+    primaryColor: Color.fromARGB(255, 18, 123, 58),
+
+    // Define the default font family.
+    fontFamily: 'Georgia',
+
+    // Define the default `TextTheme`. Use this to specify the default
+    // text styling for headlines, titles, bodies of text, and more.
+    textTheme: const TextTheme(
+      displayLarge: TextStyle(fontSize: 72, fontWeight: FontWeight.bold),
+      titleLarge: TextStyle(fontSize: 20, fontStyle: FontStyle.normal),
+      bodyMedium: TextStyle(fontSize: 14, fontFamily: 'Hind'),
+    ),
+  ),
       home: StreamBuilder(stream: FirebaseAuth.instance.authStateChanges(),
       builder: (ctx, snapshot){
         if(snapshot.connectionState ==  ConnectionState.waiting){

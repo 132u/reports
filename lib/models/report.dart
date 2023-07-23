@@ -61,9 +61,9 @@ void calculatePrice()
       endPrice=initialPrice;
       }
     if(paymentType == PaymentType.withoutVAT.toString().split('.')[1]){
-      endPrice=initialPrice! - initialPrice! * 0.2;}
-    if(paymentType == PaymentType.withVAT.toString().split('.')[1]){
       endPrice=initialPrice! - initialPrice! * 0.1;}
+    if(paymentType == PaymentType.withVAT.toString().split('.')[1]){
+      endPrice=initialPrice! - initialPrice! * 0.2;}
 
   }
 

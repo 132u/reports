@@ -1,3 +1,4 @@
+import 'package:chat_app/models/avance.dart';
 import 'package:chat_app/screens/avance.dart';
 import 'package:chat_app/screens/new_report.dart';
 import 'package:chat_app/widgets/navigationDrawer.dart';
@@ -7,26 +8,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../database_service.dart';
-import '../models/report.dart';
-import '../screens/Report.dart';
 
-class ReportsList extends StatefulWidget {
-  const ReportsList({super.key});
+class AvancesScreen extends StatefulWidget {
+  const AvancesScreen({super.key});
 
   @override
-  State<ReportsList> createState() => _ReportsListState();
+  State<AvancesScreen> createState() => _AvancesScreenState();
 }
 
-class _ReportsListState extends State<ReportsList> {
+class _AvancesScreenState extends State<AvancesScreen> {
   DatabaseService service = DatabaseService();
-  void _addReport() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => NewReportScreen()));
-    // showModalBottomSheet(
-    //   context: context,
-    //   builder: (ctx)=>const NewReportScreen());
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     final authenticatedUser = FirebaseAuth.instance.currentUser!;
@@ -34,12 +26,9 @@ class _ReportsListState extends State<ReportsList> {
       drawer: MyNavigationDrawer(),
       appBar: AppBar(
         actions: [
-          //IconButton(onPressed: _addReport, icon: const Icon(Icons.add)),
           PopupMenuButton(
-              //  onPressed:_addReport(),
               onSelected: (value) {
                 if (value == 'Отчет') {
-                  //_addReport;
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (ctx) => const NewReportScreen()));
                 } else {
@@ -65,11 +54,11 @@ class _ReportsListState extends State<ReportsList> {
                 color: Theme.of(context).colorScheme.primary,
               )),
         ],
-        title: const Text('Мои отчеты'),
+        title: const Text('Мои авансы/сдачи'),
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection('reports')
+            .collection('avances')
             .where('driverId', isEqualTo: authenticatedUser.uid)
             .snapshots(),
         builder: (ctx, snapshot) {
@@ -80,15 +69,15 @@ class _ReportsListState extends State<ReportsList> {
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return const Center(
-              child: Text('No reports here'),
+              child: Text('Нет авансов/сдач'),
             );
           }
           if (snapshot.hasError) {
             return const Center(
-              child: Text('Something went wrong'),
+              child: Text('Упс. Что-то пошло не так'),
             );
           }
-          final loadedReports = snapshot.data!.docs;
+          final loadedAvances = snapshot.data!.docs;
 
           return ListView.builder(
               padding: const EdgeInsets.only(
@@ -96,21 +85,21 @@ class _ReportsListState extends State<ReportsList> {
                 left: 13,
                 right: 13,
               ),
-              itemCount: loadedReports.length,
+              itemCount: loadedAvances.length,
               itemBuilder: (ctx, index) {
-                final report = loadedReports[index].data();
+                final avance = loadedAvances[index].data();
                 return ListTile(
-                  title: Text(Report.fromMap(report).name),
-                  subtitle: Text(Report.fromMap(report).customer),
+                  title: Text("${Avance.fromMap(avance).amount.toString()}₽"),
+                  //subtitle: Text(Avance.fromMap(avance).customer),
                   leading: Text(DateFormat('dd-MM-yyyy')
-                      .format(Report.fromMap(report).createdAt)),
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (ctx) =>
-                            ReportScreen(Report.fromMap(report))));
-                  },
+                      .format(Avance.fromMap(avance).createdAt)),
+                  // onTap: () {
+                  //   Navigator.of(context).push(MaterialPageRoute(
+                  //       builder: (ctx) =>
+                  //           ReportScreen(Report.fromMap(avance))));
+                  // },
                   trailing: Text(
-                      "${Report.fromMap(report).endPrice} ₽ ${Report.fromMap(report).isMoneyWithMe ? " у меня" : "у Виктора"}"),
+                      "${Avance.fromMap(avance).type}"),
                 );
               });
         },
@@ -118,3 +107,4 @@ class _ReportsListState extends State<ReportsList> {
     );
   }
 }
+
