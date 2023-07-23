@@ -21,50 +21,34 @@ class AvancesScreen extends StatefulWidget {
 
 class _AvancesScreenState extends State<AvancesScreen> {
   DatabaseService service = DatabaseService();
-  
+   bool _isAdmin = false;
+   List<String> adminIds = ["k9y9HZaxjmTUIlonuyxpLd4Aqod2"];
+    final authenticatedUser = FirebaseAuth.instance.currentUser!;
+    Stream<QuerySnapshot<Map<String, dynamic>>> _getAvancesListOfAllDrivers() {
+    if(adminIds.contains(authenticatedUser.uid)){
+      _isAdmin = true;
+    }
+    if (!_isAdmin) {
+      return FirebaseFirestore.instance
+          .collection('avances')
+          .where('driverId', isEqualTo: authenticatedUser.uid)
+          .snapshots();
+    } else {
+      return FirebaseFirestore.instance.collection('reports').snapshots();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final authenticatedUser = FirebaseAuth.instance.currentUser!;
+   
     return Scaffold(
       drawer: MyNavigationDrawer(),
       appBar: BaseAppBar(
           appBar: AppBar(),
           title: const Text('Мои авансы/сдачи'),
-        // actions: [
-        //    IconButton(
-        //       onPressed: () {
-        //         FirebaseAuth.instance.signOut();
-        //       },
-        //       icon: Icon(
-        //         Icons.exit_to_app,
-        //         color: Colors.green,
-        //       )),
-        //   PopupMenuButton(
-        //       onSelected: (value) {
-        //         if (value == 'Отчет') {
-        //           Navigator.of(context).push(
-        //               MaterialPageRoute(builder: (ctx) => const NewReportScreen()));
-        //         } else {
-        //           Navigator.of(context).push(
-        //               MaterialPageRoute(builder: (ctx) => NewAvanceScreen()));
-        //         }
-        //       },
-        //       itemBuilder: (context) => const [
-        //             PopupMenuItem(
-        //               child: Text('Отчет'),
-        //               value: 'Отчет',
-        //             ),
-        //             PopupMenuItem(
-        //                 child: Text('Аванс/Сдал'), value: 'Аванс/сдал'),
-        //           ]),         
-        // ],
-        
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('avances')
-            .where('driverId', isEqualTo: authenticatedUser.uid)
-            .snapshots(),
+        stream: _getAvancesListOfAllDrivers(),
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
